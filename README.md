@@ -179,4 +179,4 @@ GLES20.glEnableVertexAttribArray(aPositionLocation);
  GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
 ```
 ### 流程图
-![](https://github.com/TF27674569/OpenGLStudy/blob/master/image/opengl%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B.png)
+![](https://github.com/TF27674569/OpenGLStudy/blob/master/image/opengl_step.png)
