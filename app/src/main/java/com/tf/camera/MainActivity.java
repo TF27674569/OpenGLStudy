@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.tf.camera.renderer.FirstRenderer;
+import com.tf.camera.renderer.SampleRenderer;
 import com.tf.camera.renderer.TableRenderer;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (supportsEs2) {
             glSurfaceView.setEGLContextClientVersion(2);
-            glSurfaceView.setRenderer(new TableRenderer(this));
+            glSurfaceView.setRenderer(new SampleRenderer(this));
             rendererSet = true;
         }else {
             Toast.makeText(this, "不支持OpenGLES 2.0", Toast.LENGTH_SHORT).show();
