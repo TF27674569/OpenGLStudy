@@ -100,9 +100,16 @@ public class TableRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        // 给片段着色器颜色
-        GLES20.glUniform4f(uColorLocation, 0, 1, 1, 1);
-        // 画两个三角形
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
+//        // 给片段着色器颜色
+//        GLES20.glUniform4f(uColorLocation, 0, 1, 1, 1);
+//        // 画两个三角形
+//        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
+        /*    画不通颜色的长方形******/
+
+        GLES20.glUniform4f(uColorLocation, 1, 0, 1, 1);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES,0, 3);
+
+        GLES20.glUniform4f(uColorLocation, 1, 1, 0, 1);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES,3, 3);
     }
 }
