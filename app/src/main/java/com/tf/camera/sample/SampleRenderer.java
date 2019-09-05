@@ -1,4 +1,4 @@
-package com.tf.camera.renderer;
+package com.tf.camera.sample;
 
 import android.content.Context;
 import android.opengl.GLES20;

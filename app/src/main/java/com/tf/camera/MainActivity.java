@@ -9,9 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.tf.camera.renderer.FirstRenderer;
-import com.tf.camera.renderer.SampleRenderer;
-import com.tf.camera.renderer.TableRenderer;
+import com.tf.camera.sample.SampleRenderer;
 
 public class MainActivity extends AppCompatActivity {
 
