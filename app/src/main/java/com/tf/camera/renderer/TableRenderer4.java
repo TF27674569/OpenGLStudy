@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import com.tf.camera.R;
+import com.tf.camera.util.MatrixHelper;
 import com.tf.camera.util.ShaderHelper;
 import com.tf.camera.util.TextResourcesReader;
 
@@ -38,7 +39,10 @@ public class TableRenderer4 implements GLSurfaceView.Renderer {
     private static final String U_MATRIX = "u_Matrix";
     private int uMatrixLocation;
 
+    // 投影矩阵
     private float[] projectionMatrix = new float[16];
+    // 模型矩阵
+    private float[] modelMatrix = new float[16];
 
 
     private FloatBuffer vertexBuffer;
@@ -57,12 +61,19 @@ public class TableRenderer4 implements GLSurfaceView.Renderer {
         // 0.5f, 0.5f,
         // 以此类推
         float[] tableVertices = {
-                0, 0, 0f, 1.5f,          1f,   1f,   1f,
-                -0.5f, -0.5f, 0f, 1f,    0.7f, 0.7f, 0.7f,
-                0.5f, -0.5f, 0f, 1f,     0.7f, 0.7f, 0.7f,
-                0.5f, 0.5f, 0f, 2f,      0.7f, 0.7f, 0.7f,
-                -0.5f, 0.5f, 0f, 2f,     0.7f, 0.7f, 0.7f,
-                -0.5f, -0.5f, 0f, 1f,    0.7f, 0.7f, 0.7f
+                0, 0, 0f, 1f, 1f, 1f, 1f,
+                -0.5f, -0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f,
+                0.5f, -0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f,
+                0.5f, 0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f,
+                -0.5f, 0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f,
+                -0.5f, -0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f
+//                0, 0, 0f, 1.5f, 1f, 1f, 1f,
+//                -0.5f, -0.5f, 0f, 1f, 0.7f, 0.7f, 0.7f,
+//                0.5f, -0.5f, 0f, 1f, 0.7f, 0.7f, 0.7f,
+//                0.5f, 0.5f, 0f, 2f, 0.7f, 0.7f, 0.7f,
+//                -0.5f, 0.5f, 0f, 2f, 0.7f, 0.7f, 0.7f,
+//                -0.5f, -0.5f, 0f, 1f, 0.7f, 0.7f, 0.7f
+
         };
 
         // 申请native内存堆    byte占一个字节 里面存的时float  占4字节
@@ -117,14 +128,25 @@ public class TableRenderer4 implements GLSurfaceView.Renderer {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
 
-        float aspectRatio = width > height ? width / (float) height : height / (float) width;
-        if (width > height) {
-            // 拉伸宽度的区间
-            Matrix.orthoM(projectionMatrix, 0, -aspectRatio, aspectRatio, -1, 1, -1, 1);
-        } else {
-            // 拉伸高度的区间
-            Matrix.orthoM(projectionMatrix, 0, -1, 1, -aspectRatio, aspectRatio, -1, 1);
-        }
+//        float aspectRatio = width > height ? width / (float) height : height / (float) width;
+//        if (width > height) {
+//            // 拉伸宽度的区间
+//            Matrix.orthoM(projectionMatrix, 0, -aspectRatio, aspectRatio, -1, 1, -1, 1);
+//        } else {
+//            // 拉伸高度的区间
+//            Matrix.orthoM(projectionMatrix, 0, -1, 1, -aspectRatio, aspectRatio, -1, 1);
+//        }
+
+        // -1  -10
+        MatrixHelper.perspectiveM(projectionMatrix, 45, width / (float) height, 1f, 10f);
+
+        // 单位矩阵
+        Matrix.setIdentityM(modelMatrix, 0);
+        Matrix.translateM(modelMatrix, 0, 0, 0, -2);
+
+        float temp[] = new float[16];
+        Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
+        System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
     }
 
     @Override

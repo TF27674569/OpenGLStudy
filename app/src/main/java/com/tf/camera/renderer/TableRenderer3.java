@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import com.tf.camera.R;
+import com.tf.camera.util.MatrixHelper;
 import com.tf.camera.util.ShaderHelper;
 import com.tf.camera.util.TextResourcesReader;
 
@@ -78,7 +79,6 @@ public class TableRenderer3 implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // 屏幕底色 为红色
         GLES20.glClearColor(1, 1, 1, 1);
-
         // 着色器代码
         String vertexShaderRes = TextResourcesReader.readTextFileFromResources(context, R.raw.vertex_shader3);
         String fragmentShaderRes = TextResourcesReader.readTextFileFromResources(context, R.raw.fragment_shader2);
