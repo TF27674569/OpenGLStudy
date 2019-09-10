@@ -61,12 +61,12 @@ public class TableRenderer4 implements GLSurfaceView.Renderer {
         // 0.5f, 0.5f,
         // 以此类推
         float[] tableVertices = {
-                0, 0, 0f, 1f, 1f, 1f, 1f,
-                -0.5f, -0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-                0.5f, -0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-                0.5f, 0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-                -0.5f, 0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-                -0.5f, -0.7f, 0f, 1f, 0.7f, 0.7f, 0.7f
+                0,       0,    0f, 1f, 1f, 1f, 1f,
+                -0.5f, -0.7f, 0f,  1f, 0.7f, 0.7f, 0.7f,
+                0.5f, -0.7f, 0f,   1f, 0.7f, 0.7f, 0.7f,
+                0.5f, 0.7f, 0f,    1f, 0.7f, 0.7f, 0.7f,
+                -0.5f, 0.7f, 0f,   1f, 0.7f, 0.7f, 0.7f,
+                -0.5f, -0.7f, 0f,  1f, 0.7f, 0.7f, 0.7f
 //                0, 0, 0f, 1.5f, 1f, 1f, 1f,
 //                -0.5f, -0.5f, 0f, 1f, 0.7f, 0.7f, 0.7f,
 //                0.5f, -0.5f, 0f, 1f, 0.7f, 0.7f, 0.7f,
@@ -142,7 +142,8 @@ public class TableRenderer4 implements GLSurfaceView.Renderer {
 
         // 单位矩阵
         Matrix.setIdentityM(modelMatrix, 0);
-        Matrix.translateM(modelMatrix, 0, 0, 0, -2);
+        Matrix.rotateM(modelMatrix, 0, 6f, 1, 0,0);
+        Matrix.translateM(modelMatrix, 0, 0, 0, -2.5f);
 
         float temp[] = new float[16];
         Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
