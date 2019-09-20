@@ -4,17 +4,23 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.graphics.SurfaceTexture;
+import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.tf.camera.sample.SampleTexturedRenderer;
+import com.tf.camera.renderer.CameraRenderer;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -31,9 +37,33 @@ public class MainActivity extends AppCompatActivity {
 
         if (supportsEs2) {
             glSurfaceView.setEGLContextClientVersion(2);
-            glSurfaceView.setRenderer(new SampleTexturedRenderer(this));
+            glSurfaceView.setRenderer(new CameraRenderer(this) {
+                @Override
+                protected SurfaceTexture createSurfaceTextureBindCamera(int textureId) {
+
+                    Camera camera = Camera.open();
+                    SurfaceTexture surfaceTexture = new SurfaceTexture(textureId);
+                    surfaceTexture.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
+                        @Override
+                        public void onFrameAvailable(SurfaceTexture surfaceTexture) {
+                            glSurfaceView.requestRender();
+                        }
+                    });
+                    try {
+                        camera.setPreviewTexture(surfaceTexture);
+                        camera.startPreview();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.e("TAG", "createSurfaceTextureBindCamera: " + e.getMessage());
+                    }
+
+                    return surfaceTexture;
+                }
+
+            });
+            glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
             rendererSet = true;
-        }else {
+        } else {
             Toast.makeText(this, "不支持OpenGLES 2.0", Toast.LENGTH_SHORT).show();
         }
     }
@@ -41,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (rendererSet){
+        if (rendererSet) {
             glSurfaceView.onPause();
         }
     }
@@ -49,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (rendererSet){
+        if (rendererSet) {
             glSurfaceView.onResume();
         }
     }
+
 }

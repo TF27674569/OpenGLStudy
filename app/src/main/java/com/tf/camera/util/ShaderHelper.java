@@ -90,4 +90,28 @@ public class ShaderHelper {
 
         return shader;
     }
+
+    public static int createVBO() {
+        int[] vboIds = new int[1];
+        GLES20.glGenBuffers(vboIds.length, vboIds, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboIds[0]);
+        return vboIds[0];
+    }
+
+    public static int createFBO() {
+        int[] fboIds = new int[1];
+        GLES20.glGenFramebuffers(1, fboIds, 0);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboIds[0]);
+        return fboIds[0];
+    }
+
+    public static int buildProgram(String vertexShaderSource, String fragmentShaderSource) {
+        int program;
+        int vertexShader = compileVertexShader(vertexShaderSource);
+        int fragmentShader = compileFragmentShader(fragmentShaderSource);
+
+        program = linkProgram(vertexShader, fragmentShader);
+        validateProgram(program);
+        return program;
+    }
 }

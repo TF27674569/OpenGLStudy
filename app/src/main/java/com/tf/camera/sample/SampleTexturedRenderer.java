@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.tf.camera.R;
 import com.tf.camera.util.MatrixHelper;
@@ -176,5 +177,6 @@ public class SampleTexturedRenderer implements GLSurfaceView.Renderer {
         // 绘制
         GLES20.glDrawArrays(GL_TRIANGLE_FAN, 0, 6);
 
+        Log.e("TAG", "onDrawFrame:  thread " + Thread.currentThread().getName());
     }
 }
