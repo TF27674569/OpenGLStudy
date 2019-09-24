@@ -5,6 +5,7 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 
 import com.tf.camera.renderer.camera.Camera;
 import com.tf.camera.renderer.camera.CameraShaderProgram;

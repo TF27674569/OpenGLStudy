@@ -10,6 +10,9 @@ import android.opengl.GLSurfaceView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.tf.camera.renderer.CameraRenderer;
@@ -20,14 +23,35 @@ public class MainActivity extends AppCompatActivity {
 
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet;
+    private   Camera camera;
 
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //去除标题栏
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         glSurfaceView = new GLSurfaceView(this);
         setContentView(glSurfaceView);
+
+        glSurfaceView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (camera==null){
+                    return;
+                }
+                camera.autoFocus(new Camera.AutoFocusCallback() {
+                    @Override
+                    public void onAutoFocus(boolean b, Camera camera) {
+                        Log.e("TAG", "onAutoFocus: "+b );
+                    }
+                });
+            }
+        });
 
         // 判断支不支持 GLES2.0
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -41,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 protected SurfaceTexture createSurfaceTextureBindCamera(int textureId) {
 
-                    Camera camera = Camera.open();
+                    camera = Camera.open();
                     SurfaceTexture surfaceTexture = new SurfaceTexture(textureId);
                     surfaceTexture.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
                         @Override
@@ -51,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
                     });
                     try {
                         camera.setPreviewTexture(surfaceTexture);
+                        camera.setAutoFocusMoveCallback(new Camera.AutoFocusMoveCallback() {
+                            @Override
+                            public void onAutoFocusMoving(boolean b, Camera camera) {
+                                Log.e("TAG", "onAutoFocusMoving: "+ b);
+                            }
+                        });
+                        camera.setDisplayOrientation(90);
                         camera.startPreview();
                     } catch (IOException e) {
                         e.printStackTrace();
