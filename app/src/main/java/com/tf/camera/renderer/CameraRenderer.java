@@ -2,10 +2,8 @@ package com.tf.camera.renderer;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
-import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 
 import com.tf.camera.renderer.camera.Camera;
 import com.tf.camera.renderer.camera.CameraShaderProgram;
@@ -18,7 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * create by TIAN FENG on 2019/9/16
  */
-public abstract class CameraRenderer implements GLSurfaceView.Renderer{
+public abstract class CameraRenderer implements GLSurfaceView.Renderer {
 
 
     private Context context;
@@ -33,7 +31,7 @@ public abstract class CameraRenderer implements GLSurfaceView.Renderer{
 
 
     public CameraRenderer(Context context) {
-        this.context =context;
+        this.context = context;
     }
 
 
@@ -42,8 +40,12 @@ public abstract class CameraRenderer implements GLSurfaceView.Renderer{
         GLES20.glClearColor(1f, 1f, 1f, 1f);
         textureId = TexturedHelper.createOESTexture();
         camera = new Camera();
-        cameraShaderProgram = new CameraShaderProgram(context);
+        cameraShaderProgram = getShaderProgram(context);
         cameraShaderProgram.useProgram();
+    }
+
+    protected CameraShaderProgram getShaderProgram(Context context) {
+        return new CameraShaderProgram(context);
     }
 
 
@@ -71,8 +73,7 @@ public abstract class CameraRenderer implements GLSurfaceView.Renderer{
         // 绘制之前清屏
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         camera.bindData(cameraShaderProgram);
-        cameraShaderProgram.setUniforms(surfaceMatrix,textureId);
-
+        cameraShaderProgram.setUniforms(surfaceMatrix, textureId);
         camera.draw();
 
     }
@@ -81,5 +82,6 @@ public abstract class CameraRenderer implements GLSurfaceView.Renderer{
      * 创建SurfaceTexture并绑定摄像头硬件
      */
     protected abstract SurfaceTexture createSurfaceTextureBindCamera(int textureId);
+
 
 }

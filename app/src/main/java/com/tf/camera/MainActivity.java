@@ -13,17 +13,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.tf.camera.renderer.CameraRenderer;
+import com.tf.camera.renderer.AppCompatCameraRenderer;
 
-import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private GLSurfaceView glSurfaceView;
+    private Button def,cool,hot;
     private boolean rendererSet;
-    private   Camera camera;
+    private AppCompatCameraRenderer renderer;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -35,24 +36,41 @@ public class MainActivity extends AppCompatActivity {
         //去除状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        glSurfaceView = new GLSurfaceView(this);
-        setContentView(glSurfaceView);
+        setContentView(R.layout.activity_main);
 
-        glSurfaceView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (camera==null){
-                    return;
-                }
-                camera.autoFocus(new Camera.AutoFocusCallback() {
-                    @Override
-                    public void onAutoFocus(boolean b, Camera camera) {
-                        Log.e("TAG", "onAutoFocus: "+b );
-                    }
-                });
-            }
-        });
 
+        initView();
+        initGL();
+
+
+    }
+
+    private void initView() {
+        glSurfaceView = findViewById(R.id.glSurfaceView);
+        def = findViewById(R.id.default_);
+        cool = findViewById(R.id.cool);
+        hot = findViewById(R.id.hot);
+
+        def.setOnClickListener(this);
+        cool.setOnClickListener(this);
+        hot.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.default_:
+                break;
+            case R.id.cool:
+                break;
+            case R.id.hot:
+                break;
+        }
+    }
+
+
+    private void initGL() {
         // 判断支不支持 GLES2.0
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo deviceConfigurationInfo = activityManager.getDeviceConfigurationInfo();
@@ -61,37 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (supportsEs2) {
             glSurfaceView.setEGLContextClientVersion(2);
-            glSurfaceView.setRenderer(new CameraRenderer(this) {
-                @Override
-                protected SurfaceTexture createSurfaceTextureBindCamera(int textureId) {
-
-                    camera = Camera.open();
-                    SurfaceTexture surfaceTexture = new SurfaceTexture(textureId);
-                    surfaceTexture.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
-                        @Override
-                        public void onFrameAvailable(SurfaceTexture surfaceTexture) {
-                            glSurfaceView.requestRender();
-                        }
-                    });
-                    try {
-                        camera.setPreviewTexture(surfaceTexture);
-                        camera.setAutoFocusMoveCallback(new Camera.AutoFocusMoveCallback() {
-                            @Override
-                            public void onAutoFocusMoving(boolean b, Camera camera) {
-                                Log.e("TAG", "onAutoFocusMoving: "+ b);
-                            }
-                        });
-                        camera.setDisplayOrientation(90);
-                        camera.startPreview();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Log.e("TAG", "createSurfaceTextureBindCamera: " + e.getMessage());
-                    }
-
-                    return surfaceTexture;
-                }
-
-            });
+            glSurfaceView.setRenderer(renderer = new AppCompatCameraRenderer(glSurfaceView));
             glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
             rendererSet = true;
         } else {
@@ -114,5 +102,4 @@ public class MainActivity extends AppCompatActivity {
             glSurfaceView.onResume();
         }
     }
-
 }

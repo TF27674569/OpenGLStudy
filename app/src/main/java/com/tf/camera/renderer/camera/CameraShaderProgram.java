@@ -21,7 +21,11 @@ public class CameraShaderProgram extends ShaderProgram {
     private final int aTextureCoordinatesLocation;
 
     public CameraShaderProgram(Context context) {
-        super(context, R.raw.camera_vertex_shader, R.raw.camera_fragment_shader);
+        this(context,R.raw.camera_fragment_shader);
+    }
+
+    public CameraShaderProgram(Context context,int fragmentShaderSourceId){
+        super(context, R.raw.camera_vertex_shader, fragmentShaderSourceId);
         uTextureMatrixLocation = GLES20.glGetUniformLocation(program, U_TEXTURE_MATRIX);
         uTextureUnitLocation = GLES20.glGetUniformLocation(program, U_TEXTURE_UNIT);
         aPositionLocation = GLES20.glGetAttribLocation(program, A_POSITION);
@@ -39,7 +43,7 @@ public class CameraShaderProgram extends ShaderProgram {
         GLES20.glActiveTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
         // 绑定外部纹理到纹理单元0
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId);
-        //将此纹理单元床位片段着色器的uTextureSampler外部纹理采样器
+        //将此纹理单元传给片段着色器的uTextureSampler外部纹理采样器
         GLES20.glUniform1i(uTextureUnitLocation, 0);
         //将纹理矩阵传给片段着色器
         GLES20.glUniformMatrix4fv(uTextureMatrixLocation, 1, false, matrix, 0);

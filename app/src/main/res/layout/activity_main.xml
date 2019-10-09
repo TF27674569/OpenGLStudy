@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
@@ -12,4 +11,44 @@
         android:layout_height="match_parent" />
 
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/default_"
+            android:layout_gravity="bottom"
+            android:text="default"
+            android:layout_height="wrap_content"
+            />
+
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:id="@+id/gray"-->
+            <!--android:text="gray"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--/>-->
+
+        <Button
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/cool"
+            android:text="cool"
+            android:layout_gravity="bottom"
+            android:layout_height="wrap_content"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/hot"
+            android:text="hot"
+            android:layout_gravity="bottom"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+</FrameLayout>
